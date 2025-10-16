@@ -12,7 +12,7 @@ const INITIAL_PLAYERS: Players = [
     { id: 2, name: "Player 2", symbol: "O" }
 ];
 
-const initialGameBoard: GameBoard = [
+const INITIAL_GAME_BOARD: GameBoard = [
     [null, null, null],
     [null, null, null],
     [null, null, null]
@@ -26,36 +26,42 @@ function deriveActivePlayer(turns: GameTurn[], players: Players): Player {
     }
 }
 
-function App() {
-    const [players, setPlayers] = useState<Players>(INITIAL_PLAYERS);
-    const [gameTurns, setGameTurns] = useState<GameTurn[]>([]);
-
-    const activePlayer = deriveActivePlayer(gameTurns, players);
-
-    // Build game board from turns
-    const gameBoard: GameBoard = [...initialGameBoard.map(row => [...row])];
-    for (const turn of gameTurns) {
-        const { cell, player } = turn;
-        const { row, col } = cell;
-        gameBoard[row][col] = player.symbol;
-    }
-
-    // Check for winner
+function deriveWinner(gameBoard: GameBoard, players: Players) {
     let winner: Player | null = null;
     for (const winningCombination of WINNING_COMBINATIONS) {
         const firstCell = gameBoard[winningCombination[0].row][winningCombination[0].col];
         const secondCell = gameBoard[winningCombination[1].row][winningCombination[1].col];
         const thirdCell = gameBoard[winningCombination[2].row][winningCombination[2].col];
 
-        if (firstCell && 
-            firstCell === secondCell && 
+        if (firstCell &&
+            firstCell === secondCell &&
             secondCell === thirdCell) {
-            
+
             winner = players.find(p => p.symbol === firstCell) || null;
             break;
         }
     }
 
+    return winner;
+}
+
+function deriveGameBoard(gameTurns: GameTurn[]) {
+    const gameBoard: GameBoard = [...INITIAL_GAME_BOARD.map(row => [...row])];
+    for (const turn of gameTurns) {
+        const {cell, player} = turn;
+        const {row, col} = cell;
+        gameBoard[row][col] = player.symbol;
+    }
+    return gameBoard;
+}
+
+function App() {
+    const [players, setPlayers] = useState<Players>(INITIAL_PLAYERS);
+    const [gameTurns, setGameTurns] = useState<GameTurn[]>([]);
+
+    const activePlayer = deriveActivePlayer(gameTurns, players);
+    const gameBoard = deriveGameBoard(gameTurns);
+    const winner = deriveWinner(gameBoard, players);
     const hasDraw = gameTurns.length === 9 && !winner;
 
     function handleSelectSquare(rowIndex: number, cellIndex: number) {

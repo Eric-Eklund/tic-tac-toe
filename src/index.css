@@ -256,14 +256,25 @@ ol {
     align-items: center;
     background-color: rgba(40, 38, 23, 0.95);
     animation: pop-in 0.5s cubic-bezier(0.68, -0.55, 0.65, 0.52) forwards;
+    z-index: 100;
 }
 
 #game-over h2 {
     font-family: 'Caprasimo', cursive;
-    font-size: 4rem;
-    text-align: center;
-    color: #fcd256;
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #e1dec7;
+    text-shadow: 
+        0 0 10px rgba(204, 85, 0, 0.8),
+        0 0 20px rgba(204, 85, 0, 0.6),
+        0 0 40px rgba(204, 85, 0, 0.4),
+        0 0 80px rgba(204, 85, 0, 0.2);
     margin: 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    animation: epicTitleGlow 3s ease-in-out infinite;
+    transition: all 0.3s ease;
 }
 
 #game-over p {

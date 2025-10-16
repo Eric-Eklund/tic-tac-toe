@@ -1,24 +1,41 @@
 import {useState} from "react";
+import * as React from "react";
+import type {Player} from "../types/shared.types.tsx";
 
-export default function Player({name, symbol}: {name: string, symbol: string}) {
-    const [isEditing, setIsEditing] = useState(false)
+type PlayerProps = {
+    player: Player;
+    isActive: boolean;
+    onNameChange: (playerId: number, newName: string) => void;
+};
+
+export default function PlayerComp({player, isActive, onNameChange}: PlayerProps) {
+    const [playerName, setPlayerName] = useState(player.name);
+    const [isEditing, setIsEditing] = useState(false);
 
     function handleEditClick() {
-        setIsEditing(true)
+        if (isEditing) {
+            // Save the name
+            onNameChange(player.id, playerName);
+        }
+        setIsEditing(isEditing => !isEditing);
     }
 
-    let playerName = <span className="player-name">{name}</span>
+    function handlePlayerNameChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setPlayerName(event.target.value);
+    }
+
+    let editablePlayerName = <span className="player-name">{playerName}</span>
 
     if (isEditing) {
-        playerName = <input type="text" required/>
+        editablePlayerName = <input type="text" required value={playerName} onChange={handlePlayerNameChange}/>
     }
 
     return (
-        <li>
+        <li className={isActive ? "active" : undefined}>
             <span className="player">
-                { playerName }
-                <span className="player-symbol">{symbol}</span>
+                { editablePlayerName }
+                <span className="player-symbol">{player.symbol}</span>
             </span>
-            <button onClick={handleEditClick}>Edit</button>
+            <button onClick={handleEditClick}>{isEditing ? "Save" : "Edit"}</button>
         </li>
     )}

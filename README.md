@@ -1,16 +1,19 @@
 # React Tic-Tac-Toe
 
-A classic Tic-Tac-Toe game built with React, TypeScript, and Vite. Features a beautiful, responsive design with smooth animations and modern styling.
+A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite. Features a stunning dark theme with orange glowing effects, smooth animations, and a complete game experience with player management and game history.
 
 ## Features
 
-- 🎮 Classic 3x3 Tic-Tac-Toe gameplay
-- 👥 Two-player mode (X vs O)
-- 🎨 Beautiful gradient background and modern UI design
-- ✨ Smooth animations and hover effects
+- 🎮 Classic 3x3 Tic-Tac-Toe gameplay with smart winner detection
+- 👥 Two-player mode with editable player names
+- 🏆 Game over screen with winner announcements and rematch functionality
+- 📊 Game log showing move history
+- 🎨 Beautiful dark theme with orange glowing effects and animations
+- ✨ Epic title animations and smooth hover effects
+- 🔧 Fully typed with TypeScript and structured Player objects
 - 📱 Responsive design that works on all devices
 - ⚡ Built with Vite for fast development and optimized builds
-- 🔧 TypeScript for type safety and better developer experience
+- 🎯 Proper game state management with turn-based logic
 
 ## Tech Stack
 
@@ -56,23 +59,42 @@ A classic Tic-Tac-Toe game built with React, TypeScript, and Vite. Features a be
 
 ## How to Play
 
-1. The game starts with Player 1 (X) making the first move
-2. Players take turns clicking on empty squares to place their symbol
-3. The first player to get three of their symbols in a row (horizontally, vertically, or diagonally) wins
-4. If all squares are filled without a winner, the game ends in a draw
-5. Click "Rematch" to start a new game
+1. **Edit Player Names**: Click the "Edit" button next to any player to customize their name
+2. **Make Moves**: Players take turns clicking on empty squares to place their symbol (X or O)
+3. **Active Player**: The current player is highlighted with an orange glow
+4. **Win Condition**: Get three symbols in a row (horizontally, vertically, or diagonally) to win
+5. **Draw**: If all squares are filled without a winner, the game ends in a draw
+6. **Game Over**: A beautiful overlay appears showing the winner or draw result
+7. **Rematch**: Click "Rematch!" to start a new game with the same players
+8. **Game Log**: View the complete move history at the bottom of the screen
 
 ## Project Structure
 
 ```
 src/
 ├── components/          # React components
-│   └── Player.tsx      # Player information component
-├── App.tsx             # Main application component
+│   ├── GameBoard.tsx   # Game board with 3x3 grid
+│   ├── GameOver.tsx    # Game over overlay component
+│   ├── Log.tsx         # Game move history component
+│   └── Player.tsx      # Player information and name editing
+├── types/              # TypeScript type definitions
+│   └── shared.types.tsx # Shared types (Player, GameTurn, etc.)
+├── assets/             # Game assets and data
+│   └── winning-combinations.ts # All possible winning combinations
+├── App.tsx             # Main application component with game logic
 ├── main.tsx           # Application entry point
-├── index.css          # Global styles and animations
-└── App.css            # Component-specific styles
+└── index.css          # Complete styling with dark theme and animations
 ```
+
+## Architecture
+
+The game uses a clean, component-based architecture with:
+
+- **Structured Player Objects**: Each player has an ID, name, and symbol
+- **Type Safety**: Full TypeScript coverage with custom types
+- **State Management**: React hooks for game state and player management
+- **Smart Game Logic**: Automatic winner detection and turn management
+- **Component Separation**: Each UI element is a focused, reusable component
 
 ## Contributing
 

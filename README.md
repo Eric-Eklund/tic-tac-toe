@@ -1,105 +1,161 @@
-# React Tic-Tac-Toe
+# Tic-Tac-Toe Full Stack Application
 
-A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite. Features a stunning dark theme with orange glowing effects, smooth animations, and a complete game experience with player management and game history.
+A modern, full-stack tic-tac-toe game featuring a beautiful React frontend with TypeScript and a Go backend server. The application is containerized with Docker for easy deployment and development.
 
-## Features
+## ✨ Features
 
-- 🎮 Classic 3x3 Tic-Tac-Toe gameplay with smart winner detection
+- 🎮 Classic 3x3 Tic-Tac-Toe gameplay
+- 🎨 Beautiful dark theme with orange glowing effects
 - 👥 Two-player mode with editable player names
-- 🏆 Game over screen with winner announcements and rematch functionality
-- 📊 Game log showing move history
-- 🎨 Beautiful dark theme with orange glowing effects and animations
-- ✨ Epic title animations and smooth hover effects
-- 🔧 Fully typed with TypeScript and structured Player objects
-- 📱 Responsive design that works on all devices
-- ⚡ Built with Vite for fast development and optimized builds
-- 🎯 Proper game state management with turn-based logic
+- 🏆 Game over screen with winner announcements
+- 📊 Complete game move history
+- ⚡ Fast development with Vite and hot reloading
+- 🐳 Dockerized for easy deployment
+- 🔧 Full TypeScript support
+- 📱 Responsive design
 
-## Tech Stack
+## 🏗️ Architecture
 
-- **React** - UI library for building interactive components
-- **TypeScript** - Type-safe JavaScript for better code quality
-- **Vite** - Fast build tool and development server
-- **CSS3** - Modern styling with gradients, animations, and flexbox
-- **ESLint** - Code linting for consistent code style
+This is a full-stack application with:
 
-## Getting Started
+- **Frontend**: React + TypeScript + Vite (runs in browser)
+- **Backend**: Go HTTP server (serves static files + API endpoints)
+- **Deployment**: Multi-stage Docker build for production
 
-### Prerequisites
-
-- Node.js (version 18 or higher)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Eric-Eklund/tic-tac-toe.git
-   cd tic-tac-toe
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Open your browser and navigate to `http://localhost:5173`
-
-## Available Scripts
-
-- `npm run dev` - Start the development server
-- `npm run build` - Build the project for production
-- `npm run preview` - Preview the production build locally
-- `npm run lint` - Run ESLint to check code quality
-
-## How to Play
-
-1. **Edit Player Names**: Click the "Edit" button next to any player to customize their name
-2. **Make Moves**: Players take turns clicking on empty squares to place their symbol (X or O)
-3. **Active Player**: The current player is highlighted with an orange glow
-4. **Win Condition**: Get three symbols in a row (horizontally, vertically, or diagonally) to win
-5. **Draw**: If all squares are filled without a winner, the game ends in a draw
-6. **Game Over**: A beautiful overlay appears showing the winner or draw result
-7. **Rematch**: Click "Rematch!" to start a new game with the same players
-8. **Game Log**: View the complete move history at the bottom of the screen
-
-## Project Structure
+## 📁 Project Structure
 
 ```
-src/
-├── components/          # React components
-│   ├── GameBoard.tsx   # Game board with 3x3 grid
-│   ├── GameOver.tsx    # Game over overlay component
-│   ├── Log.tsx         # Game move history component
-│   └── Player.tsx      # Player information and name editing
-├── types/              # TypeScript type definitions
-│   └── shared.types.tsx # Shared types (Player, GameTurn, etc.)
-├── assets/             # Game assets and data
-│   └── winning-combinations.ts # All possible winning combinations
-├── App.tsx             # Main application component with game logic
-├── main.tsx           # Application entry point
-└── index.css          # Complete styling with dark theme and animations
+tic-tac-toe/
+├── back-end/              # Go backend server
+│   ├── main.go           # HTTP server with static file serving
+│   ├── go.mod            # Go module dependencies
+│   └── README.md         # Backend-specific documentation
+├── front-end/            # React frontend application
+│   ├── src/              # React components and game logic
+│   ├── public/           # Static assets (images, etc.)
+│   ├── package.json      # Node.js dependencies
+│   ├── vite.config.ts    # Vite build configuration
+│   └── README.md         # Frontend-specific documentation
+├── Dockerfile            # Multi-stage Docker build
+├── docker-compose.yml    # Docker composition
+└── README.md            # This file
 ```
 
-## Architecture
+## 🚀 Quick Start
 
-The game uses a clean, component-based architecture with:
+### Option 1: Docker (Recommended)
 
-- **Structured Player Objects**: Each player has an ID, name, and symbol
-- **Type Safety**: Full TypeScript coverage with custom types
-- **State Management**: React hooks for game state and player management
-- **Smart Game Logic**: Automatic winner detection and turn management
-- **Component Separation**: Each UI element is a focused, reusable component
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd tic-tac-toe
 
-## Contributing
+# Build and run with Docker Compose
+docker-compose up --build
 
-Contributions are welcome! Feel free to open issues or submit pull requests to improve the game.
+# Or build and run manually
+docker build -t tic-tac-toe .
+docker run -p 8080:8080 tic-tac-toe
+```
 
-## License
+The application will be available at **http://localhost:8080**
 
-This project is open source and available under the [MIT License](LICENSE).
+### Option 2: Development Mode
+
+**Prerequisites:**
+- Node.js 18+ 
+- Go 1.21+
+
+**Run Frontend (React):**
+```bash
+cd front-end
+npm install
+npm run dev
+# Available at http://localhost:5173
+```
+
+**Run Backend (Go):**
+```bash
+cd back-end
+go run main.go
+# API available at http://localhost:8080
+```
+
+## 🔌 Current API Endpoints
+
+- `GET /api/health` - Health check endpoint
+- `GET /` - Serves the React application
+- `GET /<any-path>` - Serves static assets (CSS, JS, images)
+
+> **Note**: Game logic currently runs entirely in the frontend. Backend API endpoints for game state management will be added in future iterations.
+
+## 🐳 Docker Architecture
+
+The Dockerfile uses a multi-stage build process:
+
+1. **Frontend Build Stage**: 
+   - Uses `node:18-alpine`
+   - Installs dependencies and builds React app with Vite
+   - Outputs optimized static files to `dist/`
+
+2. **Backend Build Stage**:
+   - Uses `golang:1.21-alpine` 
+   - Builds the Go HTTP server binary
+
+3. **Production Stage**:
+   - Uses minimal `alpine:latest`
+   - Copies Go binary and React static files
+   - Single container with both frontend and backend
+
+## 🎮 How to Play
+
+1. Open http://localhost:8080 in your browser
+2. Click "Edit" to customize player names
+3. Players take turns clicking empty squares
+4. Get three in a row to win!
+5. Click "Rematch!" to play again
+
+## 🛠️ Development
+
+### Adding Backend API Endpoints
+
+To add new API endpoints, edit `back-end/main.go`:
+
+```go
+// Add after line 14
+http.HandleFunc("/api/game/start", startGameHandler)
+http.HandleFunc("/api/game/move", makeMoveHandler)
+```
+
+### Frontend API Integration
+
+To call backend APIs from React:
+
+```js
+// Example API call
+const response = await fetch('/api/game/start', { method: 'POST' });
+const data = await response.json();
+```
+
+## 📚 Documentation
+
+- [Backend README](back-end/README.md) - Go server details
+- [Frontend README](front-end/README.md) - React app details
+
+## 🎯 Future Roadmap
+
+- [ ] Move game logic to backend
+- [ ] Add multiplayer support
+- [ ] WebSocket real-time updates
+- [ ] Game history persistence
+- [ ] User authentication
+- [ ] AI opponent
+- [ ] Leaderboards
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+## 📄 License
+
+This project is open source and available under the MIT License.

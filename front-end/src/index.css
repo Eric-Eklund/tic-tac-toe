@@ -24,7 +24,7 @@ body {
             rgba(25, 25, 35, 0.90),
             rgba(35, 35, 45, 0.85)
     ),
-    url('bg-pattern-dark.png');
+    url('/bg-pattern-dark.png');
     background-repeat: repeat;
     background-size: 100% 100%, 30% 30%, 100% 100%;
     background-attachment: fixed;

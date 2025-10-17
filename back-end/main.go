@@ -3,29 +3,27 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	_ "path/filepath"
+	"tic-tac-toe/internal/config"
+	"tic-tac-toe/internal/handlers"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	fmt.Println("Tic-tac-toe backend starting...")
+	cfg := config.Load()
 
-	// API routes
-	http.HandleFunc("/api/health", healthHandler)
-	// Add more API routes here later
+	if !cfg.Debug {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
-	// Serve static files (React build)
-	fs := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fs)
+	handler := handlers.NewHandler()
+	router := handler.SetupRoutes()
 
-	// Start server
-	port := ":8080"
-	fmt.Printf("Server starting on port %s\n", port)
-	log.Fatal(http.ListenAndServe(port, nil))
-}
+	fmt.Printf("Server starting on %s:%s\n", cfg.Host, cfg.Port)
+	if cfg.Debug {
+		fmt.Println("Debug mode enabled")
+	}
 
-func healthHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, `{"status":"ok","service":"tic-tac-toe-backend"}`)
+	log.Fatal(router.Run(":" + cfg.Port))
 }

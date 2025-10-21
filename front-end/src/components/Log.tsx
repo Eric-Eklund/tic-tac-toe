@@ -1,8 +1,8 @@
-import type {GameTurn, Players} from "../types/shared.types.tsx";
+import type {GameTurn, Player} from "../types/shared.types.tsx";
 
 type LogProps = {
     turns: GameTurn[];
-    players: Players;
+    players: Player[];
 };
 
 export default function Log({turns}: LogProps) {

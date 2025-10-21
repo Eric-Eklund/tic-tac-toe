@@ -11,4 +11,6 @@ export type GameTurn = {
     player: Player;
 };
 
-export type GameBoard = (string | null)[][];
+export type GameBoard = {
+    board: string[][];
+};

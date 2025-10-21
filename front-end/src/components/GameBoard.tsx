@@ -8,14 +8,14 @@ type GameBoardProps = {
 
 export default function GameBoardComp({ onSelectSquare, board, disabled = false }: GameBoardProps) {
     return <ol id="game-board">
-        {board.map((row, rowIndex) => (
+        {board.board.map((row, rowIndex) => (
             <li key={rowIndex}>
                 <ol className="board-row">
                     {row.map((playerSymbol, cellIndex) => (
                         <li key={cellIndex} className="board-cell">
                             <button 
                                 onClick={() => onSelectSquare(rowIndex, cellIndex)}
-                                disabled={disabled || playerSymbol !== null}
+                                disabled={disabled || (playerSymbol !== "" && playerSymbol !== null)}
                             >
                                 {playerSymbol || ""}
                             </button>

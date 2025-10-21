@@ -8,8 +8,8 @@ type Player struct {
 
 func GetInitialPlayers() ([]Player, error) {
 	Players := []Player{
-		{1, "Player 1", "X"},
-		{2, "Player 2", "O"},
+		{1, "Eric", "X"},
+		{2, "Jenny", "O"},
 	}
 
 	return Players, nil

@@ -1,6 +1,12 @@
 package handlers
 
-import "github.com/gin-gonic/gin"
+import (
+	"tic-tac-toe/internal/config"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+)
+import _ "github.com/gin-contrib/cors"
 
 type Handler struct {
 }
@@ -11,6 +17,7 @@ func NewHandler() *Handler {
 
 func (h *Handler) SetupRoutes() *gin.Engine {
 	router := gin.Default()
+	router.Use(cors.New(config.GetCors()))
 
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
@@ -21,6 +28,8 @@ func (h *Handler) SetupRoutes() *gin.Engine {
 
 	// API routes
 	router.GET("/api/health", h.Health)
+	router.GET("/api/players", h.InitialPlayers)
+	router.GET("/api/gameboard", h.GameBoard)
 
 	return router
 }

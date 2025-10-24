@@ -9,4 +9,7 @@ services:
       - PORT=8080
       - HOST=localhost
       - DEBUG=true
+      - DATA_DIR=/app/data
+    volumes:
+      - ./data:/app/data
     restart: unless-stopped

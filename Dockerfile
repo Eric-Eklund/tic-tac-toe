@@ -9,12 +9,20 @@ COPY front-end/ ./
 RUN npm run build
 
 # Stage 2: Build Go backend
-FROM golang:1.25.3-alpine AS backend-build
+FROM golang:1.25-alpine AS backend-build
 WORKDIR /app/backend
-COPY back-end/go.* ./
+
+# Copy go mod files first for better caching
+COPY back-end/go.mod back-end/go.sum ./
 RUN go mod download
+
+# Copy source code
 COPY back-end/ ./
-RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+# Build with cache mount for faster rebuilds
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    CGO_ENABLED=0 GOOS=linux go build -o main .
 
 # Stage 3: Final runtime image
 FROM alpine:latest

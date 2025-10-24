@@ -28,8 +28,7 @@ func (h *Handler) SetupRoutes() *gin.Engine {
 
 	// API routes
 	router.GET("/api/health", h.Health)
-	router.GET("/api/players", h.InitialPlayers)
-	router.GET("/api/gameboard", h.GameBoard)
+	router.GET("/api/new-match", h.NewMatch)
 
 	return router
 }

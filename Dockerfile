@@ -1,7 +1,7 @@
 # Multi-stage build for React + Go application
 
 # Stage 1: Build React frontend
-FROM node:18-alpine AS frontend-build
+FROM node:25-alpine AS frontend-build
 WORKDIR /app/frontend
 COPY front-end/package*.json ./
 RUN npm ci

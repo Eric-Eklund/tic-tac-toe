@@ -8,10 +8,7 @@ import (
 )
 
 func (h *Handler) InitialPlayers(c *gin.Context) {
-	players, err := models.GetInitialPlayers()
-	if err != nil {
-		return
-	}
+	players := models.GetInitialPlayers()
 
 	c.JSON(http.StatusOK, players)
 }

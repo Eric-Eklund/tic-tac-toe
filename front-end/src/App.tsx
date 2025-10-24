@@ -6,15 +6,7 @@ import Log from "./components/Log.tsx";
 import type {GameTurn, Player, Players, GameBoard} from "./types/shared.types.tsx";
 import {WINNING_COMBINATIONS} from "./assets/winning-combinations.ts";
 import GameOver from "./components/GameOver.tsx";
-import {getInitialGameBoard, getInitialPlayers} from "./services/backend.tsx";
-
-let INITIAL_GAME_BOARD: GameBoard = {
-    board: [
-        ["", "", ""],
-        ["", "", ""],
-        ["", "", ""]
-    ]
-}
+import {startNewMatch} from "./services/backend.tsx";
 
 function deriveActivePlayer(turns: GameTurn[], players: Player[]): Player {
     if (turns.length % 2 === 0) {
@@ -43,9 +35,9 @@ function deriveWinner(gameBoard: GameBoard, players: Player[]) {
     return winner;
 }
 
-function deriveGameBoard(gameTurns: GameTurn[]) {
+function deriveGameBoard(gameTurns: GameTurn[], initialBoard: GameBoard) {
     const gameBoard: GameBoard = {
-        board: INITIAL_GAME_BOARD.board.map(row => [...row])
+        board: initialBoard.board.map(row => [...row])
     };
     for (const turn of gameTurns) {
         const {cell, player} = turn;
@@ -58,23 +50,29 @@ function deriveGameBoard(gameTurns: GameTurn[]) {
 function App() {
     const [players, setPlayers] = useState<Player[]>([]);
     const [gameTurns, setGameTurns] = useState<GameTurn[]>([]);
+    const [, setGameId] = useState<string | null>(null);
+    const [initialGameBoard, setInitialGameBoard] = useState<GameBoard | null>(null);
 
     useEffect(() => {
         (async () => {
             try {
-                const data = await getInitialPlayers();
-                setPlayers(data);
-                const gameBoard = await getInitialGameBoard();
-                INITIAL_GAME_BOARD = gameBoard;
-                console.log(gameBoard);
+                const data = await startNewMatch();
+                setPlayers(data.players);
+                setGameId(data.id);
+                setInitialGameBoard(data.game_board);
+                console.log('New game started:', data);
             } catch (err) {
                 console.error(err);
             }
         })();
     }, []);
 
+    if (!players || players.length === 0 || !initialGameBoard) {
+        return <div>Loading...</div>;
+    }
+
     const activePlayer = deriveActivePlayer(gameTurns, players);
-    const gameBoard = deriveGameBoard(gameTurns);
+    const gameBoard = deriveGameBoard(gameTurns, initialGameBoard);
     const winner = deriveWinner(gameBoard, players);
     const hasDraw = gameTurns.length === 9 && !winner;
 
@@ -99,8 +97,17 @@ function App() {
         );
     }
 
-    function handleRematch() {
-        setGameTurns([])
+    async function handleRematch() {
+        try {
+            const data = await startNewMatch();
+            setPlayers(data.players);
+            setGameId(data.id);
+            setInitialGameBoard(data.game_board);
+            setGameTurns([]);
+            console.log('New game started:', data);
+        } catch (err) {
+            console.error('Failed to start new match:', err);
+        }
     }
 
     return <main>

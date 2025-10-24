@@ -6,11 +6,9 @@ type Player struct {
 	Symbol string `json:"symbol"`
 }
 
-func GetInitialPlayers() ([]Player, error) {
-	Players := []Player{
+func GetInitialPlayers() *[]Player {
+	return &[]Player{
 		{1, "Eric", "X"},
 		{2, "Jenny", "O"},
 	}
-
-	return Players, nil
 }

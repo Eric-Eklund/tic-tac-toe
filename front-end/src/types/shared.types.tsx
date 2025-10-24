@@ -14,3 +14,11 @@ export type GameTurn = {
 export type GameBoard = {
     board: string[][];
 };
+
+export type NewGameResponse = {
+    id: string;
+    game_board: {
+        board: string[][];
+    };
+    players: Player[];
+};

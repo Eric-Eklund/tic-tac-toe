@@ -1,5 +1,5 @@
 import axios from "axios"
-import type {GameBoard, Player} from "../types/shared.types.tsx"
+import type {NewGameResponse} from "../types/shared.types.tsx"
 
 
 const api = axios.create({
@@ -8,12 +8,7 @@ const api = axios.create({
     headers: {"Content-Type": "application/json"},
 });
 
-export async function getInitialPlayers(): Promise<Player[]> {
-    const response = await api.get<Player[]>("/players");
+export async function startNewMatch(): Promise<NewGameResponse> {
+    const response = await api.get<NewGameResponse>("/new-match");
     return response.data;
-}
-
-export async function getInitialGameBoard(): Promise<GameBoard> {
-    const response = await api.get<GameBoard>("/gameboard");
-    return response.data
 }

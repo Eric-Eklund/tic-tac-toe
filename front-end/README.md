@@ -1,6 +1,6 @@
-# React Tic-Tac-Toe
+# React Tic-Tac-Toe Frontend
 
-A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite. Features a stunning dark theme with orange glowing effects, smooth animations, and a complete game experience with player management and game history.
+A modern, fully-featured Tic-Tac-Toe game built with React 19, TypeScript, and Vite. Features a stunning dark theme with orange glowing effects, smooth animations, backend API integration, and a complete game experience with player management and game history.
 
 ## Features
 
@@ -8,6 +8,8 @@ A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite
 - 👥 Two-player mode with editable player names
 - 🏆 Game over screen with winner announcements and rematch functionality
 - 📊 Game log showing move history
+- 🌐 Backend API integration using Axios
+- 🔄 Game initialization from backend on load and rematch
 - 🎨 Beautiful dark theme with orange glowing effects and animations
 - ✨ Epic title animations and smooth hover effects
 - 🔧 Fully typed with TypeScript and structured Player objects
@@ -17,11 +19,12 @@ A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite
 
 ## Tech Stack
 
-- **React** - UI library for building interactive components
-- **TypeScript** - Type-safe JavaScript for better code quality
-- **Vite** - Fast build tool and development server
+- **React 19.1** - UI library for building interactive components
+- **TypeScript 5.9** - Type-safe JavaScript for better code quality
+- **Vite 5.2** - Fast build tool and development server
+- **Axios 1.12** - HTTP client for backend API communication
 - **CSS3** - Modern styling with gradients, animations, and flexbox
-- **ESLint** - Code linting for consistent code style
+- **ESLint 9** - Code linting for consistent code style
 
 ## Getting Started
 
@@ -32,10 +35,9 @@ A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite
 
 ### Installation
 
-1. Clone the repository:
+1. Navigate to the frontend directory:
    ```bash
-   git clone https://github.com/Eric-Eklund/tic-tac-toe.git
-   cd tic-tac-toe
+   cd front-end
    ```
 
 2. Install dependencies:
@@ -43,12 +45,19 @@ A modern, fully-featured Tic-Tac-Toe game built with React, TypeScript, and Vite
    npm install
    ```
 
-3. Start the development server:
+3. Ensure the backend is running (see [backend README](../back-end/README.md)):
+   ```bash
+   # In a separate terminal, from the back-end directory
+   cd ../back-end
+   go run main.go
+   ```
+
+4. Start the development server:
    ```bash
    npm run dev
    ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+5. Open your browser and navigate to `http://localhost:5173`
 
 ## Available Scripts
 
@@ -77,8 +86,10 @@ src/
 │   ├── GameOver.tsx    # Game over overlay component
 │   ├── Log.tsx         # Game move history component
 │   └── Player.tsx      # Player information and name editing
+├── services/           # Backend API integration
+│   └── backend.tsx     # Axios API client and endpoints
 ├── types/              # TypeScript type definitions
-│   └── shared.types.tsx # Shared types (Player, GameTurn, etc.)
+│   └── shared.types.tsx # Shared types (Player, GameTurn, NewGameResponse, etc.)
 ├── assets/             # Game assets and data
 │   └── winning-combinations.ts # All possible winning combinations
 ├── App.tsx             # Main application component with game logic
@@ -93,8 +104,48 @@ The game uses a clean, component-based architecture with:
 - **Structured Player Objects**: Each player has an ID, name, and symbol
 - **Type Safety**: Full TypeScript coverage with custom types
 - **State Management**: React hooks for game state and player management
+- **Backend Integration**: Axios-based API client for server communication
 - **Smart Game Logic**: Automatic winner detection and turn management
 - **Component Separation**: Each UI element is a focused, reusable component
+- **Async Data Loading**: useEffect hooks for fetching initial game state
+
+### Data Flow
+
+1. **Game Initialization**: On component mount, `startNewMatch()` API call fetches initial game state from backend
+2. **Local State Management**: Game moves are managed locally in React state for fast UI updates
+3. **Backend Sync**: Each rematch creates a new game via backend API
+4. **Derived State**: Winner and game board are computed from turns array
+
+## Backend API Integration
+
+The frontend communicates with the Go backend using Axios. API integration is in `src/services/backend.tsx`:
+
+```typescript
+import axios from "axios"
+
+const api = axios.create({
+    baseURL: "http://localhost:8080/api",
+    timeout: 5000,
+    headers: {"Content-Type": "application/json"},
+});
+
+export async function startNewMatch(): Promise<NewGameResponse> {
+    const response = await api.get<NewGameResponse>("/new-match");
+    return response.data;
+}
+```
+
+### API Endpoints Used
+
+- **GET /api/new-match**: Initialize a new game with fresh board and default player names
+- Returns: `{ id: string, game_board: GameBoard, players: Player[] }`
+
+### Error Handling
+
+API errors are caught and logged to console. In production, consider:
+- Toast notifications for user feedback
+- Retry logic for failed requests
+- Fallback to local state if backend is unavailable
 
 ## Contributing
 

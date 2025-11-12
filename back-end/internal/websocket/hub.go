@@ -93,18 +93,17 @@ func (c *Client) readPump()  {
 	for  {
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
-			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Panicf("error: %v", err)
+			// Add CloseNormalClosure to expected closes
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure, websocket.CloseNormalClosure) {
+				log.Printf("websocket error: %v", err)
 			}
-			break
+			break  // Exit gracefully on any close
 		}
-
 		var msg Message
 		if err := json.Unmarshal(message, &msg); err != nil {
 			log.Printf("error unmarshaling message: %v", err)
 			continue
 		}
-
 		switch msg.Type {
 		case "hello":
 			response := Message{
@@ -116,7 +115,6 @@ func (c *Client) readPump()  {
 		default:
 			c.hub.broadcast <- message
 		}
-
 	}
 }
 

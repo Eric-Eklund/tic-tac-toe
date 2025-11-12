@@ -6,7 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
 node_modules
 dist
 dist-ssr
@@ -23,3 +22,23 @@ dist-ssr
 *.sln
 *.sw?
 .fleet/
+
+# Go backend
+back-end/matches.json
+back-end/tic-tac-toe
+
+# Godot
+game-client/.godot/
+game-client/build/
+game-client/*.import
+game-client/export_presets.cfg
+game-client/index.*
+game-client/*.wasm
+game-client/*.pck
+game-client/*.js
+game-client/*.html
+game-client/*.png
+!game-client/icon.svg
+
+# Docker
+data/
